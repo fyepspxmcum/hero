@@ -1,0 +1,33 @@
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, CallbackContext
+
+# 替换为你的 API Token
+TOKEN = 'YOUR_TELEGRAM_BOT_API_TOKEN'
+
+def start(update: Update, context: CallbackContext) -> None:
+    """Handle /start command"""
+    update.message.reply_text('Hello! I am your bot. How can I help you today?')
+
+def help_command(update: Update, context: CallbackContext) -> None:
+    """Handle /help command"""
+    update.message.reply_text('Send me a message and I will reply with the same message.')
+
+def echo(update: Update, context: CallbackContext) -> None:
+    """Echo the user message"""
+    update.message.reply_text(update.message.text)
+
+def main() -> None:
+    """Start the bot"""
+    updater = Updater(TOKEN)
+
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(CommandHandler('start', start))
+    dispatcher.add_handler(CommandHandler('help', help_command))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
